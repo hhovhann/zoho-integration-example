@@ -1,28 +1,79 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from .authentication import SecretKeyAuthentication
-from rest_framework.permissions import IsAuthenticated
+# zoho_integration/views.py
 
-class ZohoCreateChildAccount(APIView):
-    authentication_classes = [SecretKeyAuthentication]
-    permission_classes = [IsAuthenticated]
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 
-    def post(self, request, *args, **kwargs):
-        # Handle creating the account
-        return Response({"message": "Child account created"}, status=status.HTTP_201_CREATED)
 
-class ZohoUpdateCustomer(APIView):
-    def post(self, request, *args, **kwargs):
-        # Handle updating the customer
-        return Response({"message": "Customer updated"}, status=status.HTTP_200_OK)
+# Middleware function to verify the signature
+def verify_signature(request):
+    expected_signature = "some-secret-key-would-be-from-vault"  # Replace with actual secure key
+    provided_signature = request.headers.get("X-Signature")
+    if provided_signature != expected_signature:
+        return JsonResponse({"error": "Invalid signature"}, status=403)
+    return None  # Signature is valid
 
-class ZohoUpdateInvoice(APIView):
-    def post(self, request, *args, **kwargs):
-        # Handle updating the invoice
-        return Response({"message": "Invoice updated"}, status=status.HTTP_200_OK)
 
-class ZohoUpdateProducts(APIView):
-    def post(self, request, *args, **kwargs):
-        # Handle updating the products
-        return Response({"message": "Products updated"}, status=status.HTTP_200_OK)
+@csrf_exempt  # Disable CSRF check for these API endpoints (ensure to handle this securely in production)
+def create_child_account(request):
+    signature_check = verify_signature(request)
+    if signature_check:
+        return signature_check  # Return error response if signature is invalid
+
+    if request.method == "POST":
+        try:
+            payload = json.loads(request.body)
+            # Process the payload and create the child account
+            # Add logic to handle creating the child account in your system
+            return JsonResponse({"message": "Child account created successfully!"}, status=200)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON data"}, status=400)
+    return JsonResponse({"error": "Only POST method is allowed"}, status=405)
+
+
+@csrf_exempt
+def update_customer(request):
+    signature_check = verify_signature(request)
+    if signature_check:
+        return signature_check
+
+    if request.method == "POST":
+        try:
+            payload = json.loads(request.body)
+            # Handle updating customer logic here
+            return JsonResponse({"message": "Customer updated successfully!"}, status=200)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON data"}, status=400)
+    return JsonResponse({"error": "Only POST method is allowed"}, status=405)
+
+
+@csrf_exempt
+def update_invoice(request):
+    signature_check = verify_signature(request)
+    if signature_check:
+        return signature_check
+
+    if request.method == "POST":
+        try:
+            payload = json.loads(request.body)
+            # Handle updating invoice logic here
+            return JsonResponse({"message": "Invoice updated successfully!"}, status=200)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON data"}, status=400)
+    return JsonResponse({"error": "Only POST method is allowed"}, status=405)
+
+
+@csrf_exempt
+def update_products(request):
+    signature_check = verify_signature(request)
+    if signature_check:
+        return signature_check
+
+    if request.method == "POST":
+        try:
+            payload = json.loads(request.body)
+            # Handle updating products logic here
+            return JsonResponse({"message": "Products updated successfully!"}, status=200)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON data"}, status=400)
+    return JsonResponse({"error": "Only POST method is allowed"}, status=405)
