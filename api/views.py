@@ -1,12 +1,17 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-import json
+from .authentication import SecretKeyAuthentication
+from rest_framework.permissions import IsAuthenticated
 
-# A basic view for handling each endpoint
 class ZohoCreateChildAccount(APIView):
     authentication_classes = [SecretKeyAuthentication]
     permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        # Handle creating the account
+        return Response({"message": "Child account created"}, status=status.HTTP_201_CREATED)
+
 
     def post(self, request, *args, **kwargs):
         # Handle creating the account
