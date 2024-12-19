@@ -12,11 +12,6 @@ class ZohoCreateChildAccount(APIView):
         # Handle creating the account
         return Response({"message": "Child account created"}, status=status.HTTP_201_CREATED)
 
-
-    def post(self, request, *args, **kwargs):
-        # Handle creating the account
-        return Response({"message": "Child account created"}, status=status.HTTP_201_CREATED)
-
 class ZohoUpdateCustomer(APIView):
     def post(self, request, *args, **kwargs):
         # Handle updating the customer
