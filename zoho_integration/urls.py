@@ -21,5 +21,5 @@ from django.urls import path, include  # include is needed to add additional URL
 
 urlpatterns = [
     path('admin/', admin.site.urls),  # Admin URL
-    path('api/', include('zoho_integration.api.urls')),  # Include the API URLs
+    path('api/v1/', include('zoho_integration.api.urls')),  # Include the API URLs
 ]
