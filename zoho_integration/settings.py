@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-remq==xu9r!bsw9pm#l7uwiy)*)t!!#td8fl3e2nee92wont&s
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']  # For development, replace '*' with actual domains in production
 
 
 # Application definition
@@ -38,8 +38,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
+    'rest_framework',  # Make sure DRF is installed
     'api',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'zoho_integration.api.authentication.SecretKeyAuthentication',  # You can remove or comment this line
+    ],
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -55,9 +62,6 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",  # Example frontend (Spring Boot)
 ]
-
-# ALLOWED_HOSTS configuration
-ALLOWED_HOSTS = ['*']  # For development, replace '*' with actual domains in production
 
 ROOT_URLCONF = 'zoho_integration.urls'
 

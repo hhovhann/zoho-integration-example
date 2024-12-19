@@ -1,4 +1,4 @@
-# zoho_integration/views.py
+# zoho_integration/api/views.py
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -24,7 +24,6 @@ def create_child_account(request):
         try:
             payload = json.loads(request.body)
             # Process the payload and create the child account
-            # Add logic to handle creating the child account in your system
             return JsonResponse({"message": "Child account created successfully!"}, status=200)
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON data"}, status=400)
